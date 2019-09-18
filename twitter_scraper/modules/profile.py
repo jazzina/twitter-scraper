@@ -36,6 +36,8 @@ class Profile:
         except AttributeError:
             raise ValueError(
                     f'Oops! Either "@{self.username}" does not exist or is private.')
+        except IndexError:
+            pass
 
         # parse birthday
         try:
@@ -67,12 +69,18 @@ class Profile:
             self.followers_count = 0
 
         # parse count of likes
-        q=page.find(attrs={"data-nav":"favorites"})
-        self.likes_count = int(q.attrs["title"].split(' ')[0].replace('.', ''))
+        q = page.find(attrs={"data-nav":"favorites"})
+        if q:
+            self.likes_count = int(q.attrs["title"].split(' ')[0].replace('.', ''))
+        else:
+            self.likes_count = 0
 
         # parse count of following
-        q=page.find(attrs={"data-nav":"following"})
-        self.following_count = int(q.attrs["title"].split(' ')[0].replace(',',''))
+        q = page.find(attrs={"data-nav":"following"})
+        if q:
+            self.following_count = int(q.attrs["title"].split(' ')[0].replace(',',''))
+        else:
+            self.following_count = 0 
 
         # parse count of tweets
         q=page.find(attrs={"data-nav":"tweets"})
