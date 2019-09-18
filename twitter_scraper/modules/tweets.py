@@ -10,7 +10,7 @@ session = HTMLSession()
 browser = mechanicalsoup.StatefulBrowser()
 browser.addheaders = [('User-agent', 'Firefox')]
 
-def get_tweets(query, pages=25):
+def get_tweets(query, pages=25, proxies=None):
     """Gets tweets for a given user, via the Twitter frontend API."""
 
     after_part = f'include_available_features=1&include_entities=1&include_new_items_bar=true'
@@ -30,8 +30,8 @@ def get_tweets(query, pages=25):
         'Accept-Language': 'en-US'
     }
 
-    def gen_tweets(pages):
-        r = session.get(url, headers=headers)
+    def gen_tweets(pages, proxies=None):
+        r = session.get(url, headers=headers, proxies=proxies)
 
         while pages > 0:
             try:
@@ -128,10 +128,10 @@ def get_tweets(query, pages=25):
                     tweet['text'] = re.sub(r'\Spic\.twitter', ' pic.twitter', tweet['text'], 1)
                     yield tweet
 
-            r = session.get(url, params={'max_position': last_tweet}, headers=headers)
+            r = session.get(url, params={'max_position': last_tweet}, headers=headers, proxies=proxies)
             pages += -1
 
-    yield from gen_tweets(pages)
+    yield from gen_tweets(pages, proxies)
 
 # for searching:
 #
