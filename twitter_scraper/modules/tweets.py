@@ -106,6 +106,10 @@ def get_tweets(query, pages=25, proxies=None, force_query=False):
                             video_id = tmp[:tmp.index('.jpg')]
                             videos.append({'id': video_id})
 
+                user_login = tweet.find('.js-stream-tweet')[0].attrs.get('data-screen-name', None)
+                user_id_str = tweet.find('.js-stream-tweet')[0].attrs.get('data-user-id', None)
+                user_name = tweet.find('.js-stream-tweet')[0].attrs.get('data-name', None)
+
                 tweets.append({
                     'tweetId': tweet_id,
                     'isRetweet': is_retweet,
@@ -114,6 +118,11 @@ def get_tweets(query, pages=25, proxies=None, force_query=False):
                     'replies': replies,
                     'retweets': retweets,
                     'likes': likes,
+                    'user': {
+                        'user_login': user_login,
+                        'user_id_str': user_id_str,
+                        'user_name': user_name,
+                    },
                     'entries': {
                         'hashtags': hashtags, 'urls': urls,
                         'photos': photos, 'videos': videos
