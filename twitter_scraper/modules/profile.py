@@ -64,7 +64,7 @@ class Profile:
         # parse count of followers
         try:
             q=page.find(attrs={"data-nav":"followers"})
-            self.followers_count = int(q.attrs["title"].split(' ')[0].replace(',',''))
+            self.followers_count = int(q.attrs["title"].split(' ')[0].replace(',','').replace('.',''))
         except:
             self.followers_count = 0
 
@@ -78,13 +78,13 @@ class Profile:
         # parse count of following
         q = page.find(attrs={"data-nav":"following"})
         if q:
-            self.following_count = int(q.attrs["title"].split(' ')[0].replace(',',''))
+            self.following_count = int(q.attrs["title"].split(' ')[0].replace(',','').replace('.',''))
         else:
             self.following_count = 0 
 
         # parse count of tweets
         q=page.find(attrs={"data-nav":"tweets"})
-        self.tweets_count = int(q.attrs["title"].split(' ')[0].replace(',',''))
+        self.tweets_count = int(q.attrs["title"].split(' ')[0].replace(',','').replace('.',''))
 
     def __process_paragraph(self, contents):
         output = ''
