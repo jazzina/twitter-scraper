@@ -29,6 +29,11 @@ class Profile:
         self.username = username
         self.__parse_profile(page)
 
+    @staticmethod
+    def _prepare_number(num_str):
+        result = "".join([c for c in num_str if c.isdigit()])
+        return result
+
     def __parse_profile(self, page):
         # parse location, also check is username valid 
         try:
@@ -64,27 +69,28 @@ class Profile:
         # parse count of followers
         try:
             q=page.find(attrs={"data-nav":"followers"})
-            self.followers_count = int(q.attrs["title"].split(' ')[0].replace(',','').replace('.',''))
+            self.followers_count = int(self._prepare_number(q.attrs["title"].split(' ')[0]))
         except:
             self.followers_count = 0
 
         # parse count of likes
         q = page.find(attrs={"data-nav":"favorites"})
         if q:
-            self.likes_count = int(q.attrs["title"].split(' ')[0].replace('.', ''))
+            self.likes_count = int(self._prepare_number(q.attrs["title"].split(' ')[0].replace('.', '')))
         else:
             self.likes_count = 0
 
         # parse count of following
         q = page.find(attrs={"data-nav":"following"})
         if q:
-            self.following_count = int(q.attrs["title"].split(' ')[0].replace(',','').replace('.',''))
+            self.following_count = int(self._prepare_number(q.attrs["title"].split(' ')[0]))
         else:
             self.following_count = 0 
 
         # parse count of tweets
-        q=page.find(attrs={"data-nav":"tweets"})
-        self.tweets_count = int(q.attrs["title"].split(' ')[0].replace(',','').replace('.',''))
+        q = page.find(attrs={"data-nav":"tweets"})
+
+        self.tweets_count = int(self._prepare_number(q.attrs["title"].split(' ')[0]))
 
     def __process_paragraph(self, contents):
         output = ''

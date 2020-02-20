@@ -36,8 +36,10 @@ def get_tweets(query, pages=25, proxies=None, force_query=False):
 
         while pages > 0:
             try:
-                html = HTML(html=r.json()['items_html'],
+                data = r.json()
+                html = HTML(html=data['items_html'],
                             url='bunk', default_encoding='utf-8')
+                has_more_items = data.get('has_more_items')
             except KeyError:
                 raise ValueError(
                     f'Oops! Either "{query}" does not exist or is private.')
@@ -140,6 +142,8 @@ def get_tweets(query, pages=25, proxies=None, force_query=False):
 
             r = session.get(url, params={'max_position': last_tweet}, headers=headers, proxies=proxies)
             pages += -1
+            if not has_more_items:
+                break
 
     yield from gen_tweets(pages, proxies)
 
