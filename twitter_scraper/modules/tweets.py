@@ -30,7 +30,6 @@ def get_tweets(query, pages=25, proxies=None, force_query=False):
         "Referer": f"https://twitter.com/{query}",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8",
         "X-Twitter-Active-User": "yes",
-        "X-Requested-With": "XMLHttpRequest",
         "Accept-Language": "en-US",
     }
 
